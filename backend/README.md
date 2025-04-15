@@ -14,3 +14,6 @@ docker-compose exec app bash
 ```bash
 php artisan migrate --seed
 ```
+4. Usuário e senha padrão gerado na seed:
+Email: customer@adrianocobuccio.com
+Senha: customer123
