@@ -1,4 +1,5 @@
-# Desafio Técnico - Adriano Cobuccio
+## Desafio Técnico - Adriano Cobuccio
+# Dentro de cada aplicação (frontend/backend) possui a explicação para execução
 
 Este projeto foi desenvolvido como parte de um desafio técnico e segue boas práticas de desenvolvimento em Laravel, incluindo uma arquitetura em camadas, autenticação via JWT, observabilidade com Telescope, testes unitários e documentação completa com Swagger.
 
