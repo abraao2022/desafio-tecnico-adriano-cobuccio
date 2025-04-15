@@ -1,0 +1,428 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Sistema Financeiro",
+        "description": "Documentação da API para o sistema financeiro do desafio técnico.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Servidor principal da API"
+        }
+    ],
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Realiza o login do usuário",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas"
+                    }
+                }
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Retorna o usuário autenticado",
+                "operationId": "me",
+                "responses": {
+                    "200": {
+                        "description": "Usuário autenticado retornado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Realiza o logout do usuário",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Logout feito com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Atualiza o token JWT",
+                "operationId": "refresh",
+                "responses": {
+                    "200": {
+                        "description": "Token atualizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/customers": {
+            "post": {
+                "tags": [
+                    "Clientes"
+                ],
+                "summary": "Criar um novo cliente",
+                "operationId": "storeCustomer",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cliente criado com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro interno ao criar cliente"
+                    }
+                }
+            }
+        },
+        "/api/transaction/deposit": {
+            "post": {
+                "tags": [
+                    "Transações"
+                ],
+                "summary": "Criar deposito",
+                "operationId": "deposit",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransactionDepositRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transação criada com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro interno ao criar transação"
+                    }
+                }
+            }
+        },
+        "/api/transaction/revert": {
+            "post": {
+                "tags": [
+                    "Transações"
+                ],
+                "summary": "Reverter transação",
+                "operationId": "revert",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransactionRevertRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transação criada com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro interno ao criar transação"
+                    }
+                }
+            }
+        },
+        "/api/transaction/transfer": {
+            "post": {
+                "tags": [
+                    "Transações"
+                ],
+                "summary": "Transferencia bancária",
+                "operationId": "transfer",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TransactionTransferRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transação criada com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro interno ao criar transação"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "LoginRequest": {
+                "title": "LoginRequest",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "usuario@email.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "123456"
+                    }
+                },
+                "type": "object"
+            },
+            "TokenResponse": {
+                "title": "TokenResponse",
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "example": "eyJ0eXAiOiJKV1QiLC..."
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "example": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "example": 3600
+                    },
+                    "user": {
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "João da Silva"
+                            },
+                            "email": {
+                                "type": "string",
+                                "example": "joao@email.com"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "CustomerRequest": {
+                "required": [
+                    "user",
+                    "customer"
+                ],
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/UserRequest"
+                    },
+                    "customer": {
+                        "required": [
+                            "balance"
+                        ],
+                        "properties": {
+                            "balance": {
+                                "type": "number",
+                                "format": "float",
+                                "example": 100
+                            },
+                            "phone_number": {
+                                "type": "string",
+                                "example": "11999999999"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "TransactionDepositRequest": {
+                "required": [
+                    "from_customer_id",
+                    "to_customer_id",
+                    "amount",
+                    "description",
+                    "metadata"
+                ],
+                "properties": {
+                    "from_customer_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "to_customer_id": {
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 250.75
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Transferência para outro cliente"
+                    },
+                    "metadata": {
+                        "type": "string",
+                        "example": "{}"
+                    }
+                },
+                "type": "object"
+            },
+            "TransactionRevertRequest": {
+                "required": [
+                    "transaction_id"
+                ],
+                "properties": {
+                    "transaction_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Transferência para outro cliente"
+                    }
+                },
+                "type": "object"
+            },
+            "TransactionTransferRequest": {
+                "required": [
+                    "to_customer_id",
+                    "amount",
+                    "description",
+                    "metadata"
+                ],
+                "properties": {
+                    "to_customer_id": {
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "amount": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 250.75
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Transferência para outro cliente"
+                    },
+                    "metadata": {
+                        "type": "string",
+                        "example": "{}"
+                    }
+                },
+                "type": "object"
+            },
+            "UserRequest": {
+                "required": [
+                    "name",
+                    "email",
+                    "cpf",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Lucas"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "lucass@example.com"
+                    },
+                    "cpf": {
+                        "type": "string",
+                        "example": "13345678920"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "senhasegura"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticação",
+            "description": "Endpoints relacionados à autenticação de usuários"
+        },
+        {
+            "name": "Clientes",
+            "description": "Operações relacionadas aos clientes"
+        },
+        {
+            "name": "Transações",
+            "description": "Operações relacionadas as transações"
+        }
+    ]
+}
